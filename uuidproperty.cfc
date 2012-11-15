@@ -79,19 +79,47 @@
       var loc = {};
 
       for (loc.item in arguments.properties)
+      {
         if (StructKeyExists(this, loc.item) and IsUuid(this[loc.item]))
+        {
+          loc.hasChanged = hasChanged(loc.item);
           this[loc.item] = UUIDToByteArray(this[loc.item]);
+
+          if (!loc.hasChanged and !isNew())
+            variables.$persistedProperties[loc.item] = this[loc.item];
+        }
+      }
     </cfscript>
   </cffunction>
 
-  <cffunction name="$binaryPropertiesToUUID" access="public" output="false" returntype="void">
+  <cffunction name="$binaryPropertiesToUUID" access="public" output="false" returntype="any">
     <cfargument name="properties" type="array" required="false" default="#variables.wheels.class.uuidProperties#" />
     <cfscript>
-      var loc = {};
+      var loc = { afterFind = false };
 
       for (loc.item in arguments.properties)
+      {
         if (StructKeyExists(this, loc.item) and IsBinary(this[loc.item]))
+        {
+          loc.hasChanged = hasChanged(loc.item);
           this[loc.item] = byteArrayToUUID(this[loc.item]);
+
+          if (!loc.hasChanged and !isNew())
+            variables.$persistedProperties[loc.item] = this[loc.item];
+        }
+
+        if (StructKeyExists(arguments, loc.item) and isBinary(arguments[loc.item]))
+        {
+          loc.afterFind = true;
+          arguments[loc.item] = byteArrayToUUID(arguments[loc.item]);
+        }
+      }
+
+      if (loc.afterFind)
+      {
+        structDelete(arguments, "properties", false);
+        return arguments;
+      }
     </cfscript>
   </cffunction>
   

@@ -1,4 +1,4 @@
-<cfcomponent mixin="model" output="false">
+<cfcomponent output="false">
 
   <cffunction name="init">
     <cfset this.version = "1.1.8">
@@ -30,13 +30,13 @@
     </cfscript>
   </cffunction>
 
-  <cffunction name="isUuid" access="public" output="false" returntype="boolean">
+  <cffunction name="isUuid" access="public" output="false" returntype="boolean" mixin="controller,model">
     <cfargument name="string" type="string" required="true" />
     <!--- example UUID (includes CF uuids): f136bf63-8fd4-4683-bdf1-e865d12e53c2 --->
     <cfreturn REFindNoCase("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", arguments.string) />
   </cffunction>
 
-  <cffunction name="byteArrayToUUID" access="public" output="false" returntype="string">
+  <cffunction name="byteArrayToUUID" access="public" output="false" returntype="string" mixin="controller,model">
     <cfargument name="byteArray" type="binary" required="true" />
     <cfscript>
       var loc = {};
@@ -49,7 +49,7 @@
     <cfreturn loc.uuid.toString() />
   </cffunction>
 
-  <cffunction name="UUIDToByteArray" access="public" output="false" returntype="string">
+  <cffunction name="UUIDToByteArray" access="public" output="false" returntype="string" mixin="controller,model">
     <cfargument name="string" type="string" required="true" />
     <cfscript>
       var loc = {};
@@ -73,7 +73,7 @@
     <cfreturn loc.byteArray />
   </cffunction>
 
-  <cffunction name="$UUIDPropertiesToBinary" access="public" output="false" returntype="void">
+  <cffunction name="$UUIDPropertiesToBinary" access="public" output="false" returntype="void" mixin="model">
     <cfargument name="properties" type="array" required="false" default="#variables.wheels.class.uuidProperties#" />
     <cfscript>
       var loc = {};
@@ -92,7 +92,7 @@
     </cfscript>
   </cffunction>
 
-  <cffunction name="$binaryPropertiesToUUID" access="public" output="false" returntype="any">
+  <cffunction name="$binaryPropertiesToUUID" access="public" output="false" returntype="any" mixin="model">
     <cfargument name="properties" type="array" required="false" default="#variables.wheels.class.uuidProperties#" />
     <cfscript>
       var loc = { afterFind = false };
